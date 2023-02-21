@@ -1,0 +1,27 @@
+schemaVersion: 2.2.0
+metadata:
+  name: testcontainers-sample
+components:
+  - name: tooling-container
+    container:
+      env:
+        - name: DOCKER_HOST
+          value: 'tcp://127.0.0.1:2475'
+      image: quay.io/mloriedo/universal-developer-image:kubedock
+      memoryRequest: 2Gi
+      memoryLimit: 11Gi
+      cpuRequest: 1000m
+      cpuLimit: 4000m
+commands:
+  - id: run
+    exec:
+      component: tooling-container
+      commandLine: ./gradlew run
+  - id: start-kubedock
+    exec:
+      component: tooling-container
+      commandLine: kubedock server --port-forward   
+  - id: docker-run
+    exec:
+      component: tooling-container
+      commandLine: docker run --name httpd -d -p 8080:8080 python python -m http.server 8080
